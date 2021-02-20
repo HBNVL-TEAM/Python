@@ -1,0 +1,71 @@
+<html>
+    <head>
+        <title>Môn học</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <style>
+          table.table-dark
+          {
+            border-collapse: collapse;
+            border-radius: 1em;
+            overflow: hidden;
+          }
+          body
+          {
+            background-color:#454d55;
+            color: blanchedalmond;
+            font-family: 'Times New Roman', Times, serif;
+          }
+        </style>
+    </head>
+    <body>
+        <form action="/" method="POST">
+        <div class="container">
+            <h2><center>App Scan Finder Admin</center></h2>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Nhập Website</span>
+              </div>
+                <input type="text" class="form-control col-sm-5" name="url" value="{{request.form.url}}">
+                <input type="text" class="for-control col-sm-5" name="chao" value="{{request.form.chao}}">
+             <div class="input-group-append">
+               <button class="btn btn-success" type="submit" name="scan" value="scan">SCAN</button>
+               <button class="btn btn-success" type="submit"  name="hello" value="hello">Hello</button>
+             </div>
+            </div>
+            {% if hello %}
+            <h1>{{request.form.chao}}</h1>
+            {% endif %}
+            <table class="table table-dark">
+                <thead>
+                  <tr>
+                    {% if td %}
+                        {% for j in td %}
+                          <th>{{j}}</th>
+                        {% endfor %}             
+                    {% endif %}
+                  </tr>
+                </thead>
+                <tbody>
+                {% if kq %}
+                  {% for key,value in kq.items() %}
+                    {% if  value == 200 %}
+                      <tr>
+                        <td><a href="{{key}}" target="_blank">{{key}}</a></td>
+                        <td>{{value}}</td>
+                        <td><img src="static/images/tick_green.png"></td>
+                      </tr>
+                    {% endif %}
+                  {% endfor %}
+                  <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Scan</strong> Success ! 
+                  </div>
+                {% endif %}
+                </tbody>
+              </table>
+              
+        </form>
+    </body>
