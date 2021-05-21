@@ -2,6 +2,7 @@ from flask import Flask,render_template,request,send_file
 import requests as rq
 import json
 import os
+import tldextract
 app = Flask(__name__)
 @app.route('/',methods=['POST','GET'])
 def index():
@@ -21,9 +22,26 @@ def show_contact():
 
 @app.route('/subdomain/<url>',methods=['GET'])
 def subdomain(url):
-    os.system('wafw00f '+url+' -o /home/phuctruong2k/'+url+'.json')
+    os.system('python3 /home/phuctruong2k/CMSeeK/cmseek.py -v -o -u '+url+' --batch')
+    file =open('/home/phuctruong2k/CMSeeK/Result/'+url+'/cms.json')
+    info='''
+    <h2> Report</h2>
+    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+    <table class="table table-dark table-hover table-striped mb-0">   
+        <thead>
+            <tr>
+                <th colspan="2" style="background-color: green;">Information</th>
+            </tr>
+        </thead>
+    '''
+    dt = json.load(file)
+    inf=''
+    for x, y in dt.items():
+        inf+='<tr><td>{0}: {1}</td><tr>'.format(x.upper(),y)
+        
     #rp=rq.get('https://sonar.omnisint.io/subdomains/'+url)
-    rp=rq.get('https://api.hackertarget.com/hostsearch/?q='+url)
+    ext = tldextract.extract(url)
+    rp=rq.get('https://api.hackertarget.com/hostsearch/?q='+ext.domain+"."+ext.suffix)
     sum=0
     s=''
     for i in rp.text.split('\n'):
@@ -66,7 +84,8 @@ def subdomain(url):
 
     sub=table_1+s+'</tbody></table></div>'
     reip_t=table_2+s2+'</tbody></table></div>'
-    return sub  + reip_t
+    infor=info+inf+'</tbody></table></div>'
+    return infor+sub  + reip_t
 if __name__ =="__main__":
-    app.run(host="127.0.0.1",port=8083)
+    app.run(host="127.0.0.1",port=8080)
     
